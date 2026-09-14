@@ -51,7 +51,7 @@
 
         .hero {
             text-align: center;
-            padding: 50px 20px 30px 20px;
+            padding: 40px 20px 20px 20px;
         }
 
         .hero h1 {
@@ -68,8 +68,44 @@
             line-height: 1.5;
         }
 
+        /* 실시간 고민 핫라인 스타일 */
+        .live-ticker {
+            background: rgba(123, 31, 162, 0.15);
+            border: 1px dashed rgba(224, 176, 255, 0.4);
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin: 0 20px 20px 20px;
+            max-width: 560px;
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box;
+        }
+
+        .live-ticker-title {
+            font-size: 0.8em;
+            color: #ffeb3b;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .ticker-item {
+            font-size: 0.85em;
+            color: #e1bee7;
+            margin: 4px 0;
+            display: flex;
+            align-items: center;
+            animation: fadeInOut 4s infinite;
+        }
+
+        .ticker-item::before {
+            content: "🔥";
+            margin-right: 6px;
+            font-size: 0.8em;
+        }
+
         .container {
-            padding: 10px 20px 50px 20px;
+            padding: 0 20px 50px 20px;
             max-width: 600px;
             margin: 0 auto;
         }
@@ -186,7 +222,7 @@
             margin-top: 12px;
         }
 
-        /* 모달(팝업) 스타일 */
+        /* 모달 스타일 */
         .modal {
             display: none;
             position: fixed;
@@ -225,6 +261,14 @@
         <p>운명의 카드가 속삭이는 비밀스러운 공간</p>
     </section>
 
+    <!-- 실시간 고민 핫라인 (상단 노출) -->
+    <div class="live-ticker">
+        <div class="live-ticker-title">⚡ 실시간 익명 고민 핫라인 (Live)</div>
+        <div id="liveTickerContent">
+            <!-- 자바스크립트로 실시간 고민이 순환 표시됩니다 -->
+        </div>
+    </div>
+
     <div class="container">
         
         <!-- 1. 소개 -->
@@ -233,7 +277,7 @@
             <p>아르카나 라운지는 오직 진심 어린 통찰과 타로 카드를 통해 당신의 길을 밝혀주는 프라이빗 공간입니다.</p>
         </div>
 
-        <!-- 2. 상담사 프로필 (동적 렌더링 영역) -->
+        <!-- 2. 상담사 프로필 -->
         <div class="card" id="counselors">
             <h3>
                 🔮 타로 상담사 프로필 
@@ -241,9 +285,7 @@
             </h3>
             <p>깊은 통찰력으로 앞날을 밝혀줄 전문 상담사들을 만나보세요.</p>
             
-            <div id="counselorListContainer">
-                <!-- 자바스크립트로 프로필 카드가 여기에 동적으로 그려집니다 -->
-            </div>
+            <div id="counselorListContainer"></div>
         </div>
 
         <!-- 3. 1:1 비밀 상담 신청 -->
@@ -336,7 +378,23 @@
     </div>
 
     <script>
-        // 기본 마스터 데이터 (로컬 스토리지에 없으면 초기값 세팅)
+        // 실시간 고민 리스트 5개
+        const liveWorries = [
+            "\"연락이 끊긴 그 사람, 다시 연락이 올까요?\" (익명 님)",
+            "\"이직을 준비 중인데 지금 회사를 나가는 게 맞을까요?\" (익명 님)",
+            "\"요즘 마음이 너무 허전하고 방향을 잃은 기분이에요...\" (익명 님)",
+            "\"새로운 인연이 다가오고 있는지 궁금합니다.\" (익명 님)",
+            "\"중요한 계약을 앞두고 있는데 좋은 결과가 있을까요?\" (익명 님)"
+        ];
+
+        let currentWorryIndex = 0;
+        function updateLiveTicker() {
+            const tickerEl = document.getElementById('liveTickerContent');
+            tickerEl.innerHTML = `<div class="ticker-item">${liveWorries[currentWorryIndex]}</div>`;
+            currentWorryIndex = (currentWorryIndex + 1) % liveWorries.length;
+        }
+
+        // 기본 마스터 데이터
         const defaultMasters = {
             hermes: {
                 name: "✦ 마스터 에르메스 (Hermes)",
@@ -350,7 +408,6 @@
             }
         };
 
-        // 저장된 데이터 불러오기
         function getMastersData() {
             const saved = localStorage.getItem('arcana_masters');
             if (saved) {
@@ -361,7 +418,6 @@
 
         let currentLoggedInMaster = localStorage.getItem('arcana_logged_in') || null;
 
-        // 화면에 마스터 프로필 및 상담 신청 셀렉트박스 렌더링
         function renderMasters() {
             const data = getMastersData();
             const listContainer = document.getElementById('counselorListContainer');
@@ -373,8 +429,6 @@
 
             for (let key in data) {
                 const m = data[key];
-                
-                // 프로필 카드 생성
                 let editBtnHtml = '';
                 if (currentLoggedInMaster === key) {
                     editBtnHtml = `<button class="btn-small" style="float: right;" onclick="openEditModal('${key}')">내 프로필 수정</button>`;
@@ -388,8 +442,6 @@
                         <p>${m.desc}</p>
                     </div>
                 `;
-
-                // 상담 신청 select 옵션 추가
                 selectContainer.innerHTML += `<option value="${key}">${m.name}</option>`;
             }
 
@@ -400,7 +452,6 @@
             }
         }
 
-        // 로그인 모달 제어
         function openLoginModal() {
             if (currentLoggedInMaster) {
                 openEditModal(currentLoggedInMaster);
@@ -416,7 +467,7 @@
             const pwd = document.getElementById('modalPassword').value;
             const mKey = document.getElementById('modalMasterId').value;
 
-            if (pwd === "1234") { // 테스트용 비밀번호
+            if (pwd === "1234") {
                 currentLoggedInMaster = mKey;
                 localStorage.setItem('arcana_logged_in', mKey);
                 closeLoginModal();
@@ -435,7 +486,6 @@
             alert("로그아웃 되었습니다.");
         }
 
-        // 프로필 수정 모달 제어
         function openEditModal(key) {
             const data = getMastersData();
             const m = data[key];
@@ -462,7 +512,6 @@
             alert("프로필이 성공적으로 업데이트되었습니다!");
         }
 
-        // 상담 신청 제출 핸들러
         function submitConsultation(e) {
             e.preventDefault();
             const selectEl = document.getElementById('applyMasterSelect');
@@ -473,9 +522,10 @@
             e.target.reset();
         }
 
-        // 페이지 로드시 렌더링 실행
         window.onload = function() {
             renderMasters();
+            updateLiveTicker();
+            setInterval(updateLiveTicker, 3500); // 3.5초마다 고민거리 전환
         };
     </script>
 </body>
