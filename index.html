@@ -5,14 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>아르카나 라운지</title>
     <style>
+        :root {
+            --bg-grad-1: #1e1b2e;
+            --bg-grad-2: #0d0c14;
+            --text-main: #d1c4e9;
+            --accent: #e0b0ff;
+            --card-bg-1: rgba(30, 27, 46, 0.7);
+            --card-bg-2: rgba(18, 16, 28, 0.9);
+            --border-color: rgba(149, 117, 205, 0.3);
+        }
+
+        /* 마스터 로그인 시 적용될 전용 테마 (확연한 차이) */
+        body.master-mode {
+            --bg-grad-1: #2c1e1e;
+            --bg-grad-2: #140d0d;
+            --text-main: #fbe9e7;
+            --accent: #ffb74d;
+            --card-bg-1: rgba(44, 30, 30, 0.85);
+            --card-bg-2: rgba(26, 16, 16, 0.95);
+            --border-color: rgba(255, 183, 77, 0.5);
+        }
+
         body {
             margin: 0;
             padding: 0;
             font-family: 'Georgia', serif;
-            background: radial-gradient(circle at center, #1e1b2e 0%, #0d0c14 100%);
-            color: #d1c4e9;
+            background: radial-gradient(circle at center, var(--bg-grad-1) 0%, var(--bg-grad-2) 100%);
+            color: var(--text-main);
             min-height: 100vh;
             scroll-behavior: smooth;
+            transition: background 0.5s ease;
         }
 
         header {
@@ -22,16 +44,17 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(149, 117, 205, 0.2);
+            border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
             z-index: 100;
+            transition: border-color 0.5s ease;
         }
 
         .logo {
             font-size: 1.2em;
             font-weight: bold;
-            color: #e0b0ff;
+            color: var(--accent);
             letter-spacing: 2px;
             text-shadow: 0 0 10px rgba(224, 176, 255, 0.4);
         }
@@ -46,7 +69,7 @@
         }
 
         nav a:hover {
-            color: #e0b0ff;
+            color: var(--accent);
         }
 
         .hero {
@@ -55,11 +78,12 @@
         }
 
         .hero h1 {
-            color: #e0b0ff;
+            color: var(--accent);
             font-size: 2em;
             margin-bottom: 10px;
             letter-spacing: 3px;
             text-shadow: 0 0 15px rgba(186, 104, 200, 0.5);
+            transition: color 0.5s ease;
         }
 
         .hero p {
@@ -68,10 +92,27 @@
             line-height: 1.5;
         }
 
-        /* 실시간 고민 핫라인 스타일 수정 */
+        /* 마스터 모드 안내 배너 스타일 */
+        .master-banner {
+            display: none;
+            background: linear-gradient(135deg, #ff8f00, #e65100);
+            color: #fff;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.8em;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 10px rgba(255, 143, 0, 0.4);
+        }
+
+        body.master-mode .master-banner {
+            display: block;
+        }
+
+        /* 실시간 고민 핫라인 박스 */
         .live-ticker {
             background: rgba(123, 31, 162, 0.2);
-            border: 1px solid rgba(224, 176, 255, 0.4);
+            border: 1px solid var(--border-color);
             border-radius: 10px;
             padding: 14px 18px;
             margin: 0 auto 25px auto;
@@ -79,6 +120,11 @@
             width: 85%;
             box-sizing: border-box;
             box-shadow: 0 0 15px rgba(123, 31, 162, 0.3);
+        }
+
+        body.master-mode .live-ticker {
+            background: rgba(255, 152, 0, 0.15);
+            border-color: rgba(255, 183, 77, 0.4);
         }
 
         .live-ticker-title {
@@ -91,7 +137,7 @@
 
         .ticker-item {
             font-size: 0.88em;
-            color: #f3e5f5;
+            color: var(--text-main);
             margin: 0;
             display: block;
             line-height: 1.4;
@@ -104,20 +150,21 @@
         }
 
         .card {
-            background: linear-gradient(135deg, rgba(30, 27, 46, 0.7), rgba(18, 16, 28, 0.9));
-            border: 1px solid rgba(149, 117, 205, 0.3);
+            background: linear-gradient(135deg, var(--card-bg-1), var(--card-bg-2));
+            border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 22px;
             margin-bottom: 20px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.5s ease;
         }
 
         .card h3 {
             margin-top: 0;
-            color: #e0b0ff;
+            color: var(--accent);
             font-size: 1.15em;
             letter-spacing: 1px;
-            border-bottom: 1px solid rgba(149, 117, 205, 0.2);
+            border-bottom: 1px solid var(--border-color);
             padding-bottom: 10px;
             display: flex;
             justify-content: space-between;
@@ -130,16 +177,24 @@
             line-height: 1.5;
         }
 
+        body.master-mode .card p {
+            color: #ffccbc;
+        }
+
         .profile-card {
             background: rgba(20, 18, 30, 0.6);
-            border: 1px solid rgba(149, 117, 205, 0.2);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 15px;
             margin-top: 15px;
         }
 
+        body.master-mode .profile-card {
+            background: rgba(40, 20, 20, 0.6);
+        }
+
         .profile-card h4 {
-            color: #e0b0ff;
+            color: var(--accent);
             margin-top: 0;
             margin-bottom: 8px;
         }
@@ -147,6 +202,30 @@
         .profile-card p {
             margin: 5px 0;
             font-size: 0.85em;
+        }
+
+        /* 마스터 전용 상담 관리 아이템 (클릭 시 타이틀 연동) */
+        .consultation-item {
+            background: rgba(13, 12, 20, 0.6);
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .consultation-item:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+        .consultation-item h5 {
+            margin: 0 0 5px 0;
+            color: var(--accent);
+            font-size: 0.9em;
+        }
+        .consultation-item p {
+            margin: 0;
+            font-size: 0.8em;
         }
 
         .form-group {
@@ -165,9 +244,9 @@
             width: 100%;
             padding: 10px;
             background: rgba(13, 12, 20, 0.8);
-            border: 1px solid rgba(149, 117, 205, 0.3);
+            border: 1px solid var(--border-color);
             border-radius: 6px;
-            color: #d1c4e9;
+            color: var(--text-main);
             box-sizing: border-box;
             font-family: inherit;
             font-size: 0.9em;
@@ -175,7 +254,7 @@
 
         .input-field:focus {
             outline: none;
-            border-color: #e0b0ff;
+            border-color: var(--accent);
         }
 
         .btn {
@@ -192,16 +271,22 @@
             box-shadow: 0 0 10px rgba(123, 31, 162, 0.6);
             letter-spacing: 1px;
             margin-top: 10px;
+            transition: background 0.3s;
+        }
+
+        body.master-mode .btn {
+            background: linear-gradient(135deg, #ff8f00, #d84315);
+            box-shadow: 0 0 10px rgba(255, 143, 0, 0.6);
         }
 
         .btn:hover {
-            background: linear-gradient(135deg, #9c27b0, #673ab7);
+            opacity: 0.9;
         }
 
         .btn-small {
             background: rgba(149, 117, 205, 0.2);
-            color: #e0b0ff;
-            border: 1px solid rgba(149, 117, 205, 0.4);
+            color: var(--accent);
+            border: 1px solid var(--border-color);
             padding: 5px 10px;
             border-radius: 4px;
             font-size: 0.75em;
@@ -226,16 +311,24 @@
         }
         .modal-content {
             background: #181524;
-            border: 1px solid rgba(149, 117, 205, 0.4);
+            border: 1px solid var(--border-color);
             padding: 25px;
             border-radius: 12px;
             width: 90%;
             max-width: 400px;
             box-shadow: 0 5px 25px rgba(0,0,0,0.7);
         }
+        body.master-mode .modal-content {
+            background: #241818;
+        }
     </style>
 </head>
-<body>
+<body id="pageBody">
+
+    <!-- 마스터 모드 전용 안내 배너 -->
+    <div class="master-banner">
+        ⚡ [MASTER ADMIN MODE] 마스터 관리자 전용 세션이 활성화되었습니다.
+    </div>
 
     <header>
         <div class="logo">ARCANA LOUNGE</div>
@@ -244,13 +337,13 @@
             <a href="#counselors">상담사</a>
             <a href="#apply">신청</a>
             <a href="#reviews">후기</a>
-            <a onclick="openLoginModal()" style="color: #ffeb3b; font-weight: bold;">[마스터 로그인]</a>
+            <a onclick="openLoginModal()" style="color: #ffeb3b; font-weight: bold;" id="loginNavBtn">[마스터 로그인]</a>
         </nav>
     </header>
 
     <section class="hero">
-        <h1>아르카나 라운지</h1>
-        <p>운명의 카드가 속삭이는 비밀스러운 공간</p>
+        <h1 id="mainTitle">아르카나 라운지</h1>
+        <p id="mainSubtitle">운명의 카드가 속삭이는 비밀스러운 공간</p>
     </section>
 
     <!-- 실시간 고민 핫라인 박스 -->
@@ -267,15 +360,23 @@
             <p>아르카나 라운지는 오직 진심 어린 통찰과 타로 카드를 통해 당신의 길을 밝혀주는 프라이빗 공간입니다.</p>
         </div>
 
-        <!-- 2. 상담사 프로필 -->
+        <!-- 2. 상담사 프로필 및 마스터 관리 패널 -->
         <div class="card" id="counselors">
             <h3>
                 🔮 타로 상담사 프로필 
-                <span id="loginStatusIndicator" style="font-size: 0.7em; color: #b39ddb;"></span>
+                <span id="loginStatusIndicator" style="font-size: 0.7em; color: var(--accent);"></span>
             </h3>
             <p>깊은 통찰력으로 앞날을 밝혀줄 전문 상담사들을 만나보세요.</p>
             
             <div id="counselorListContainer"></div>
+
+            <!-- 마스터 로그인 시에만 노출되는 실시간 상담 관리 섹션 -->
+            <div id="masterConsultationPanel" style="display:none; margin-top: 20px; border-top: 1px dashed var(--border-color); padding-top: 15px;">
+                <h4 style="color: var(--accent); margin-bottom: 10px;">📋 접수된 실시간 상담 목록 (클릭하여 타이틀 연동)</h4>
+                <div id="consultationQueueContainer">
+                    <!-- 자바스크립트로 동적 생성 -->
+                </div>
+            </div>
         </div>
 
         <!-- 3. 1:1 비밀 상담 신청 -->
@@ -310,7 +411,7 @@
             <h3>⭐ 타로 후기 게시판</h3>
             <p>카드를 통해 고민을 해결한 내담자들의 솔직한 이야기.</p>
             <div class="review-box">
-                <p style="margin: 0; font-style: italic; color: #d1c4e9;">"제 속마음을 들여다보신 것처럼 방향을 잡아주셔서 큰 위로가 되었습니다."</p>
+                <p style="margin: 0; font-style: italic; color: var(--text-main);">"제 속마음을 들여다보신 것처럼 방향을 잡아주셔서 큰 위로가 되었습니다."</p>
                 <span style="font-size: 0.8em; color: #9575cd; display: block; margin-top: 5px;">- 내담자 K님</span>
             </div>
         </div>
@@ -320,7 +421,7 @@
     <!-- 마스터 로그인 모달 -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; color:#e0b0ff; border-bottom:1px solid rgba(149,117,205,0.2); padding-bottom:8px;">
+            <h3 style="margin-top:0; color:var(--accent); border-bottom:1px solid var(--border-color); padding-bottom:8px;">
                 🔐 마스터 인증 로그인
             </h3>
             <p style="font-size: 0.85em; color: #b39ddb;">등록된 마스터 계정을 선택하고 비밀번호를 입력하세요.</p>
@@ -345,7 +446,7 @@
     <!-- 프로필 수정 모달 -->
     <div id="editModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; color:#e0b0ff; border-bottom:1px solid rgba(149,117,205,0.2); padding-bottom:8px;">
+            <h3 style="margin-top:0; color:var(--accent); border-bottom:1px solid var(--border-color); padding-bottom:8px;">
                 ✍️ 프로필 및 소개 수정
             </h3>
             <input type="hidden" id="editMasterKey">
@@ -363,18 +464,24 @@
             </div>
 
             <button class="btn" onclick="saveProfileChanges()">수정 내용 저장하기</button>
-            <button class="btn-small" style="width:100%; margin-top:10px; padding:8px; background:rgba(244,67,54,0.2); color:#ff8a80;" onclick="logoutMaster()">로그아웃</button>
+            <button class="btn-small" style="width:100%; margin-top:10px; padding:8px; background:rgba(244,67,54,0.2); color:#ff8a80;" onclick="logoutMaster()">로그아웃 및 일반 모드 전환</button>
         </div>
     </div>
 
     <script>
-        // 실시간 고민 리스트 5개
         const liveWorries = [
             "💬 \"연락이 끊긴 그 사람, 다시 연락이 올까요?\" (익명 님)",
             "💬 \"이직을 준비 중인데 지금 회사를 나가는 게 맞을까요?\" (익명 님)",
             "💬 \"요즘 마음이 너무 허전하고 방향을 잃은 기분이에요...\" (익명 님)",
             "💬 \"새로운 인연이 다가오고 있는지 궁금합니다.\" (익명 님)",
             "💬 \"중요한 계약을 앞두고 있는데 좋은 결과가 있을까요?\" (익명 님)"
+        ];
+
+        // 마스터 전용 실시간 상담 큐 데이터 (클릭 시 타이틀 연동용)
+        const sampleConsultations = [
+            { id: 1, title: "[연애운] 재회 가능성 및 상대방 속마음 집중 리딩", client: "달빛토끼", date: "방금 전" },
+            { id: 2, title: "[커리어] 상반기 이직운 및 새로운 부서 적응 여부", client: "별빛바다", date: "5분 전" },
+            { id: 3, title: "[금전/계약] 하반기 부동산 투자 및 금전 흐름 체크", client: "초원", date: "12분 전" }
         ];
 
         let currentWorryIndex = 0;
@@ -384,7 +491,6 @@
             currentWorryIndex = (currentWorryIndex + 1) % liveWorries.length;
         }
 
-        // 기본 마스터 데이터
         const defaultMasters = {
             hermes: {
                 name: "✦ 마스터 에르메스 (Hermes)",
@@ -400,15 +506,16 @@
 
         function getMastersData() {
             const saved = localStorage.getItem('arcana_masters');
-            if (saved) {
-                return JSON.parse(saved);
-            }
+            if (saved) return JSON.parse(saved);
             return defaultMasters;
         }
 
         let currentLoggedInMaster = localStorage.getItem('arcana_logged_in') || null;
 
-        function renderMasters() {
+        function renderAppMode() {
+            const bodyEl = document.getElementById('pageBody');
+            const navBtn = document.getElementById('loginNavBtn');
+            const panel = document.getElementById('masterConsultationPanel');
             const data = getMastersData();
             const listContainer = document.getElementById('counselorListContainer');
             const selectContainer = document.getElementById('applyMasterSelect');
@@ -416,6 +523,30 @@
 
             listContainer.innerHTML = '';
             selectContainer.innerHTML = '<option value="" disabled selected>마스터를 선택하세요</option>';
+
+            if (currentLoggedInMaster) {
+                // 마스터 로그인 모드 (확연한 테마 차이 적용)
+                bodyEl.classList.add('master-mode');
+                navBtn.innerHTML = `[마스터 관리중: ${data[currentLoggedInMaster].name.split(' ')[1]}]`;
+                panel.style.display = 'block';
+                
+                // 상담 목록 렌더링
+                const queueEl = document.getElementById('consultationQueueContainer');
+                queueEl.innerHTML = '';
+                sampleConsultations.forEach(item => {
+                    queueEl.innerHTML += `
+                        <div class="consultation-item" onclick="selectConsultationToTitle('${item.title}', '${item.client}')">
+                            <h5>🔥 ${item.title}</h5>
+                            <p>내담자: <strong>${item.client}</strong> (${item.date}) — <em>[클릭하여 상단 타이틀에 적용]</em></p>
+                        </div>
+                    `;
+                });
+            } else {
+                // 일반 방문자 모드
+                bodyEl.classList.remove('master-mode');
+                navBtn.innerHTML = '[마스터 로그인]';
+                panel.style.display = 'none';
+            }
 
             for (let key in data) {
                 const m = data[key];
@@ -436,10 +567,22 @@
             }
 
             if (currentLoggedInMaster) {
-                indicator.innerHTML = `(로그인됨: ${data[currentLoggedInMaster].name})`;
+                indicator.innerHTML = `(마스터 권한 활성화됨)`;
             } else {
                 indicator.innerHTML = ``;
             }
+        }
+
+        // 마스터가 상담 항목을 클릭했을 때 상단 타이틀에 실시간 노출되는 함수
+        function selectConsultationToTitle(consultTitle, clientName) {
+            const mainTitleEl = document.getElementById('mainTitle');
+            const mainSubtitleEl = document.getElementById('mainSubtitle');
+
+            mainTitleEl.innerText = `🔮 ${consultTitle}`;
+            mainSubtitleEl.innerText = `현재 집중 상담 중인 내담자: [${clientName}]님의 세션 공간입니다.`;
+            
+            alert(`상단 타이틀에 '${consultTitle}' 세션이 실시간 연동되었습니다!`);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function openLoginModal() {
@@ -461,8 +604,8 @@
                 currentLoggedInMaster = mKey;
                 localStorage.setItem('arcana_logged_in', mKey);
                 closeLoginModal();
-                renderMasters();
-                alert("로그인 성공! 프로필 수정 권한이 활성화되었습니다.");
+                renderAppMode();
+                alert("마스터 로그인 성공! 관리자 전용 테마와 기능이 활성화되었습니다.");
             } else {
                 alert("비밀번호가 틀렸습니다. (테스트 비밀번호: 1234)");
             }
@@ -472,8 +615,13 @@
             currentLoggedInMaster = null;
             localStorage.removeItem('arcana_logged_in');
             document.getElementById('editModal').style.display = 'none';
-            renderMasters();
-            alert("로그아웃 되었습니다.");
+            
+            // 타이틀 원래대로 복구
+            document.getElementById('mainTitle').innerText = "아르카나 라운지";
+            document.getElementById('mainSubtitle').innerText = "운명의 카드가 속삭이는 비밀스러운 공간";
+
+            renderAppMode();
+            alert("로그아웃되었습니다. 일반 방문자 모드로 전환됩니다.");
         }
 
         function openEditModal(key) {
@@ -498,7 +646,7 @@
 
             localStorage.setItem('arcana_masters', JSON.stringify(data));
             document.getElementById('editModal').style.display = 'none';
-            renderMasters();
+            renderAppMode();
             alert("프로필이 성공적으로 업데이트되었습니다!");
         }
 
@@ -513,9 +661,9 @@
         }
 
         window.onload = function() {
-            renderMasters();
+            renderAppMode();
             updateLiveTicker();
-            setInterval(updateLiveTicker, 4000); // 4초마다 고민거리 전환
+            setInterval(updateLiveTicker, 4000);
         };
     </script>
 </body>
