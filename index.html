@@ -49,11 +49,13 @@
             z-index: 100;
         }
 
-        .logo {
+        .logo a {
             font-size: 1.15em;
             font-weight: bold;
             color: var(--accent);
             letter-spacing: 2px;
+            text-decoration: none;
+            cursor: pointer;
         }
 
         nav a {
@@ -175,8 +177,8 @@
         }
 
         .profile-avatar {
-            width: 70px;
-            height: 70px;
+            width: 75px;
+            height: 75px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--accent);
@@ -326,7 +328,7 @@
     </div>
 
     <header>
-        <div class="logo">ARCANA LOUNGE</div>
+        <div class="logo"><a href="#">ARCANA LOUNGE</a></div>
         <nav>
             <a href="#intro">소개</a>
             <a href="#counselors">상담사</a>
@@ -416,9 +418,7 @@
             
             <div class="form-group">
                 <label>마스터 선택</label>
-                <select id="modalMasterId" class="input-field">
-                    <!-- 자바스크립트로 동적 로드 -->
-                </select>
+                <select id="modalMasterId" class="input-field"></select>
             </div>
             <div class="form-group">
                 <label>비밀번호 (테스트용 공통: 1234)</label>
@@ -436,7 +436,7 @@
             <h3 style="margin-top:0; color:var(--accent); border-bottom:1px solid var(--border-color); padding-bottom:8px;">
                 📝 신규 마스터 가입 신청
             </h3>
-            <p style="font-size: 0.85em; color: #94a3b8;">아르카나 라운지에서 활동할 새 마스터 정보를 입력해주세요.</p>
+            <p style="font-size: 0.85em; color: #94a3b8;">디바이스(PC/폰)에서 직접 이미지 파일을 선택해 등록할 수 있습니다.</p>
             
             <div class="form-group">
                 <label>아이디 (영문 소문자)</label>
@@ -455,8 +455,8 @@
                 <input type="text" id="newJoinTag" class="input-field" placeholder="예: 주특기: 타로 심리, 인간관계">
             </div>
             <div class="form-group">
-                <label>프로필 사진 (이미지 URL)</label>
-                <input type="text" id="newJoinAvatar" class="input-field" placeholder="https://... 이미지 주소">
+                <label>프로필 사진 파일 선택 (기기 앨범/PC 파일)</label>
+                <input type="file" id="newJoinAvatarFile" class="input-field" accept="image/*" style="padding: 7px;">
             </div>
             <div class="form-group">
                 <label>상세 소개 문구</label>
@@ -472,13 +472,13 @@
     <div id="editModal" class="modal">
         <div class="modal-content">
             <h3 style="margin-top:0; color:var(--accent); border-bottom:1px solid var(--border-color); padding-bottom:8px;">
-                ✍️ 프로필 및 일러스트 사진 수정
+                ✍️ 프로필 및 사진 파일 수정
             </h3>
             <input type="hidden" id="editMasterKey">
             
             <div class="form-group">
-                <label>마스터 프로필 사진 (이미지 주소 URL)</label>
-                <input type="text" id="editAvatar" class="input-field">
+                <label>새 프로필 사진 파일 선택 (변경 시에만 선택)</label>
+                <input type="file" id="editAvatarFile" class="input-field" accept="image/*" style="padding: 7px;">
             </div>
             <div class="form-group">
                 <label>마스터 칭호 / 이름</label>
@@ -622,7 +622,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 로그인 모달
         function openLoginModal() {
             if (currentLoggedInMaster) {
                 openEditModal(currentLoggedInMaster);
@@ -653,7 +652,6 @@
             }
         }
 
-        // 신규 마스터 가입 모달
         function openMasterJoinModal() {
             document.getElementById('masterJoinModal').style.display = 'flex';
         }
@@ -666,8 +664,8 @@
             const pwd = document.getElementById('newJoinPwd').value;
             const name = document.getElementById('newJoinName').value;
             const tag = document.getElementById('newJoinTag').value;
-            const avatar = document.getElementById('newJoinAvatar').value;
             const desc = document.getElementById('newJoinDesc').value;
+            const fileInput = document.getElementById('newJoinAvatarFile');
 
             if (!id || !pwd || !name) {
                 alert("아이디, 비밀번호, 마스터 이름은 필수 입력 항목입니다!");
@@ -680,19 +678,31 @@
                 return;
             }
 
-            // 신규 등록
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    saveNewMasterData(id, pwd, name, tag, desc, e.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                saveNewMasterData(id, pwd, name, tag, desc, "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80");
+            }
+        }
+
+        function saveNewMasterData(id, pwd, name, tag, desc, avatarData) {
+            let data = getMastersData();
             data[id] = {
                 name: name,
                 tag: tag || "주특기: 종합 타로 상담",
                 desc: desc || "새롭게 합류한 아르카나 라운지의 마스터입니다.",
-                avatar: avatar || "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80",
+                avatar: avatarData,
                 password: pwd
             };
 
             localStorage.setItem('arcana_masters', JSON.stringify(data));
             closeMasterJoinModal();
             renderAppMode();
-            alert(`환영합니다! '${name}' 마스터 가입이 완료되었습니다. 로그인 메뉴에서 방금 만든 아이디를 선택해 로그인해보세요.`);
+            alert(`환영합니다! '${name}' 마스터 가입이 완료되었습니다.`);
         }
 
         function logoutMaster() {
@@ -712,10 +722,10 @@
             const m = data[key];
 
             document.getElementById('editMasterKey').value = key;
-            document.getElementById('editAvatar').value = m.avatar || '';
             document.getElementById('editName').value = m.name;
             document.getElementById('editTag').value = m.tag;
             document.getElementById('editDesc').value = m.desc;
+            document.getElementById('editAvatarFile').value = '';
 
             document.getElementById('editModal').style.display = 'flex';
         }
@@ -723,16 +733,28 @@
         function saveProfileChanges() {
             const key = document.getElementById('editMasterKey').value;
             const data = getMastersData();
+            const fileInput = document.getElementById('editAvatarFile');
 
-            data[key].avatar = document.getElementById('editAvatar').value;
             data[key].name = document.getElementById('editName').value;
             data[key].tag = document.getElementById('editTag').value;
             data[key].desc = document.getElementById('editDesc').value;
 
-            localStorage.setItem('arcana_masters', JSON.stringify(data));
-            document.getElementById('editModal').style.display = 'none';
-            renderAppMode();
-            alert("프로필이 성공적으로 업데이트되었습니다!");
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    data[key].avatar = e.target.result;
+                    localStorage.setItem('arcana_masters', JSON.stringify(data));
+                    document.getElementById('editModal').style.display = 'none';
+                    renderAppMode();
+                    alert("프로필 및 사진이 성공적으로 업데이트되었습니다!");
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                localStorage.setItem('arcana_masters', JSON.stringify(data));
+                document.getElementById('editModal').style.display = 'none';
+                renderAppMode();
+                alert("프로필이 성공적으로 업데이트되었습니다!");
+            }
         }
 
         function submitConsultation(e) {
@@ -753,3 +775,4 @@
     </script>
 </body>
 </html>
+
