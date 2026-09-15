@@ -9,18 +9,17 @@
             --bg-grad-1: #12121c;
             --bg-grad-2: #07070a;
             --text-main: #e2e8f0;
-            --accent: #d4af37; /* 샴페인 골드 */
+            --accent: #d4af37;
             --card-bg-1: rgba(26, 26, 36, 0.85);
             --card-bg-2: rgba(16, 16, 24, 0.95);
             --border-color: rgba(212, 175, 55, 0.25);
         }
 
-        /* 마스터 로그인 시 적용될 깔끔하고 정돈된 프리미엄 앰버/골드 테마 */
         body.master-mode {
             --bg-grad-1: #1a1512;
             --bg-grad-2: #0a0706;
             --text-main: #fcf8f2;
-            --accent: #ffb703; /* 선명한 골드/앰버 */
+            --accent: #ffb703;
             --card-bg-1: rgba(36, 28, 24, 0.9);
             --card-bg-2: rgba(20, 15, 13, 0.95);
             --border-color: rgba(255, 183, 3, 0.4);
@@ -60,8 +59,8 @@
         nav a {
             color: #94a3b8;
             text-decoration: none;
-            margin-left: 8px;
-            font-size: 0.75em;
+            margin-left: 6px;
+            font-size: 0.72em;
             cursor: pointer;
             transition: color 0.2s;
         }
@@ -88,7 +87,6 @@
             line-height: 1.4;
         }
 
-        /* 마스터 모드 상단 안내 바 */
         .master-banner {
             display: none;
             background: linear-gradient(135deg, #fb8500, #ffb703);
@@ -104,7 +102,6 @@
             display: block;
         }
 
-        /* 실시간 고민 핫라인 박스 */
         .live-ticker {
             background: rgba(212, 175, 55, 0.08);
             border: 1px solid var(--border-color);
@@ -121,7 +118,6 @@
             color: var(--accent);
             margin-bottom: 4px;
             font-weight: bold;
-            letter-spacing: 0.5px;
         }
 
         .ticker-item {
@@ -150,7 +146,6 @@
             margin-top: 0;
             color: var(--accent);
             font-size: 1.1em;
-            letter-spacing: 0.5px;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 10px;
             display: flex;
@@ -164,7 +159,6 @@
             line-height: 1.5;
         }
 
-        /* 마스터 프로필 카드 (아바타 이미지 포함 깔끔한 레이아웃) */
         .profile-card {
             background: rgba(10, 10, 15, 0.5);
             border: 1px solid var(--border-color);
@@ -205,7 +199,6 @@
             font-size: 0.82em;
         }
 
-        /* 마스터 전용 상담 관리 목록 */
         .consultation-item {
             background: rgba(10, 10, 15, 0.7);
             border: 1px solid var(--border-color);
@@ -270,9 +263,7 @@
             font-weight: bold;
             font-size: 0.88em;
             cursor: pointer;
-            letter-spacing: 0.5px;
             margin-top: 10px;
-            transition: opacity 0.2s;
         }
 
         body.master-mode .btn {
@@ -320,6 +311,8 @@
             width: 90%;
             max-width: 400px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            max-height: 90vh;
+            overflow-y: auto;
         }
         body.master-mode .modal-content {
             background: #1c1512;
@@ -328,9 +321,8 @@
 </head>
 <body id="pageBody">
 
-    <!-- 마스터 모드 안내 배너 -->
     <div class="master-banner">
-        ✦ [MASTER MODE] 마스터 관리자 전용 깔끔한 프리미엄 세션이 활성화되었습니다.
+        ✦ [MASTER MODE] 마스터 관리자 전용 세션이 활성화되었습니다.
     </div>
 
     <header>
@@ -340,7 +332,8 @@
             <a href="#counselors">상담사</a>
             <a href="#apply">신청</a>
             <a href="#reviews">후기</a>
-            <a onclick="openLoginModal()" style="color: var(--accent); font-weight: bold;" id="loginNavBtn">[마스터 로그인]</a>
+            <a onclick="openMasterJoinModal()" style="color: #94a3b8;">[마스터 가입]</a>
+            <a onclick="openLoginModal()" style="color: var(--accent); font-weight: bold;" id="loginNavBtn">[로그인]</a>
         </nav>
     </header>
 
@@ -349,7 +342,6 @@
         <p id="mainSubtitle">운명의 카드가 속삭이는 비밀스러운 공간</p>
     </section>
 
-    <!-- 실시간 고민 핫라인 박스 -->
     <div class="live-ticker">
         <div class="live-ticker-title">🔥 실시간 익명 고민 핫라인</div>
         <div id="liveTickerContent" class="ticker-item">고민을 불러오는 중...</div>
@@ -357,13 +349,11 @@
 
     <div class="container">
         
-        <!-- 1. 소개 -->
         <div class="card" id="intro">
             <h3>🌙 라운지 소개</h3>
             <p>아르카나 라운지는 오직 진심 어린 통찰과 타로 카드를 통해 당신의 길을 밝혀주는 프라이빗 공간입니다.</p>
         </div>
 
-        <!-- 2. 상담사 프로필 및 마스터 관리 패널 -->
         <div class="card" id="counselors">
             <h3>
                 🔮 타로 상담사 프로필 
@@ -373,14 +363,12 @@
             
             <div id="counselorListContainer"></div>
 
-            <!-- 마스터 로그인 시에만 노출되는 실시간 상담 관리 섹션 -->
             <div id="masterConsultationPanel" style="display:none; margin-top: 20px; border-top: 1px dashed var(--border-color); padding-top: 15px;">
                 <h4 style="color: var(--accent); margin-bottom: 10px; font-size: 0.95em;">📋 접수된 실시간 상담 목록 (클릭하여 타이틀 연동)</h4>
                 <div id="consultationQueueContainer"></div>
             </div>
         </div>
 
-        <!-- 3. 1:1 비밀 상담 신청 -->
         <div class="card" id="apply">
             <h3>✨ 1:1 비밀 상담 신청</h3>
             <p>오직 당신만을 위한 프라이빗하고 신비로운 타로 세션.</p>
@@ -407,7 +395,6 @@
             </form>
         </div>
 
-        <!-- 4. 후기 게시판 -->
         <div class="card" id="reviews">
             <h3>⭐ 타로 후기 게시판</h3>
             <p>카드를 통해 고민을 해결한 내담자들의 솔직한 이야기.</p>
@@ -430,17 +417,54 @@
             <div class="form-group">
                 <label>마스터 선택</label>
                 <select id="modalMasterId" class="input-field">
-                    <option value="hermes">마스터 에르메스</option>
-                    <option value="serena">마스터 세레나</option>
+                    <!-- 자바스크립트로 동적 로드 -->
                 </select>
             </div>
             <div class="form-group">
-                <label>비밀번호 (테스트용: 1234)</label>
+                <label>비밀번호 (테스트용 공통: 1234)</label>
                 <input type="password" id="modalPassword" class="input-field" placeholder="비밀번호 입력">
             </div>
 
             <button class="btn" onclick="handleLogin()">로그인 하기</button>
             <button class="btn-small" style="width:100%; margin-top:10px; padding:8px;" onclick="closeLoginModal()">닫기</button>
+        </div>
+    </div>
+
+    <!-- 신규 마스터 가입 신청 모달 -->
+    <div id="masterJoinModal" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-top:0; color:var(--accent); border-bottom:1px solid var(--border-color); padding-bottom:8px;">
+                📝 신규 마스터 가입 신청
+            </h3>
+            <p style="font-size: 0.85em; color: #94a3b8;">아르카나 라운지에서 활동할 새 마스터 정보를 입력해주세요.</p>
+            
+            <div class="form-group">
+                <label>아이디 (영문 소문자)</label>
+                <input type="text" id="newJoinId" class="input-field" placeholder="예: luna">
+            </div>
+            <div class="form-group">
+                <label>비밀번호</label>
+                <input type="password" id="newJoinPwd" class="input-field" placeholder="비밀번호 입력">
+            </div>
+            <div class="form-group">
+                <label>마스터 칭호 및 이름</label>
+                <input type="text" id="newJoinName" class="input-field" placeholder="예: ✦ 마스터 루나 (Luna)">
+            </div>
+            <div class="form-group">
+                <label>주특기 및 태그</label>
+                <input type="text" id="newJoinTag" class="input-field" placeholder="예: 주특기: 타로 심리, 인간관계">
+            </div>
+            <div class="form-group">
+                <label>프로필 사진 (이미지 URL)</label>
+                <input type="text" id="newJoinAvatar" class="input-field" placeholder="https://... 이미지 주소">
+            </div>
+            <div class="form-group">
+                <label>상세 소개 문구</label>
+                <textarea id="newJoinDesc" class="input-field" rows="2" placeholder="소개글을 적어주세요"></textarea>
+            </div>
+
+            <button class="btn" onclick="submitMasterJoin()">가입 완료 및 등록</button>
+            <button class="btn-small" style="width:100%; margin-top:10px; padding:8px;" onclick="closeMasterJoinModal()">닫기</button>
         </div>
     </div>
 
@@ -454,7 +478,7 @@
             
             <div class="form-group">
                 <label>마스터 프로필 사진 (이미지 주소 URL)</label>
-                <input type="text" id="editAvatar" class="input-field" placeholder="https://example.com/photo.jpg 형식의 주소">
+                <input type="text" id="editAvatar" class="input-field">
             </div>
             <div class="form-group">
                 <label>마스터 칭호 / 이름</label>
@@ -496,19 +520,20 @@
             currentWorryIndex = (currentWorryIndex + 1) % liveWorries.length;
         }
 
-        // 기본 마스터 데이터 (기본 아바타 이미지 포함)
         const defaultMasters = {
             hermes: {
                 name: "✦ 마스터 에르메스 (Hermes)",
                 tag: "주특기: 연애운, 상대방의 속마음, 관계 개선",
                 desc: "무의식의 심연을 꿰뚫어 보며, 얽힌 인연의 결을 섬세하게 읽어냅니다.",
-                avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80"
+                avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+                password: "123"
             },
             serena: {
                 name: "✦ 마스터 세레나 (Serena)",
                 tag: "주특기: 진로 및 커리어, 금전운, 인생 선택지",
                 desc: "냉철하고 명징한 타로 리딩으로 다가올 기회와 방향을 안내합니다.",
-                avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80"
+                avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
+                password: "123"
             }
         };
 
@@ -527,12 +552,14 @@
             const data = getMastersData();
             const listContainer = document.getElementById('counselorListContainer');
             const selectContainer = document.getElementById('applyMasterSelect');
+            const modalSelectContainer = document.getElementById('modalMasterId');
             const indicator = document.getElementById('loginStatusIndicator');
 
             listContainer.innerHTML = '';
             selectContainer.innerHTML = '<option value="" disabled selected>마스터를 선택하세요</option>';
+            modalSelectContainer.innerHTML = '';
 
-            if (currentLoggedInMaster) {
+            if (currentLoggedInMaster && data[currentLoggedInMaster]) {
                 bodyEl.classList.add('master-mode');
                 navBtn.innerHTML = `[관리중: ${data[currentLoggedInMaster].name.split(' ')[1]}]`;
                 panel.style.display = 'block';
@@ -549,8 +576,10 @@
                 });
             } else {
                 bodyEl.classList.remove('master-mode');
-                navBtn.innerHTML = '[마스터 로그인]';
+                navBtn.innerHTML = '[로그인]';
                 panel.style.display = 'none';
+                currentLoggedInMaster = null;
+                localStorage.removeItem('arcana_logged_in');
             }
 
             for (let key in data) {
@@ -562,7 +591,7 @@
 
                 listContainer.innerHTML += `
                     <div class="profile-card">
-                        <img src="${m.avatar}" class="profile-avatar" alt="마스터 사진">
+                        <img src="${m.avatar || 'https://via.placeholder.com/150'}" class="profile-avatar" alt="마스터 사진">
                         <div class="profile-info">
                             <h4>${m.name}</h4>
                             <p><strong>${m.tag}</strong></p>
@@ -572,9 +601,10 @@
                     </div>
                 `;
                 selectContainer.innerHTML += `<option value="${key}">${m.name}</option>`;
+                modalSelectContainer.innerHTML += `<option value="${key}">${m.name}</option>`;
             }
 
-            if (currentLoggedInMaster) {
+            if (currentLoggedInMaster && data[currentLoggedInMaster]) {
                 indicator.innerHTML = `(관리자 모드 활성화됨)`;
             } else {
                 indicator.innerHTML = ``;
@@ -592,6 +622,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // 로그인 모달
         function openLoginModal() {
             if (currentLoggedInMaster) {
                 openEditModal(currentLoggedInMaster);
@@ -606,16 +637,62 @@
         function handleLogin() {
             const pwd = document.getElementById('modalPassword').value;
             const mKey = document.getElementById('modalMasterId').value;
+            const data = getMastersData();
 
-            if (pwd === "1234") {
+            const targetMaster = data[mKey];
+            const correctPwd = targetMaster ? (targetMaster.password || "1234") : "1234";
+
+            if (pwd === correctPwd || pwd === "1234") {
                 currentLoggedInMaster = mKey;
                 localStorage.setItem('arcana_logged_in', mKey);
                 closeLoginModal();
                 renderAppMode();
-                alert("마스터 로그인 성공! 깔끔하고 정돈된 프리미엄 앰버 테마가 적용되었습니다.");
+                alert(`마스터 로그인 성공! (${targetMaster.name})`);
             } else {
-                alert("비밀번호가 틀렸습니다. (테스트 비밀번호: 1234)");
+                alert("비밀번호가 틀렸습니다. (기본 비밀번호: 1234)");
             }
+        }
+
+        // 신규 마스터 가입 모달
+        function openMasterJoinModal() {
+            document.getElementById('masterJoinModal').style.display = 'flex';
+        }
+        function closeMasterJoinModal() {
+            document.getElementById('masterJoinModal').style.display = 'none';
+        }
+
+        function submitMasterJoin() {
+            const id = document.getElementById('newJoinId').value.trim().toLowerCase();
+            const pwd = document.getElementById('newJoinPwd').value;
+            const name = document.getElementById('newJoinName').value;
+            const tag = document.getElementById('newJoinTag').value;
+            const avatar = document.getElementById('newJoinAvatar').value;
+            const desc = document.getElementById('newJoinDesc').value;
+
+            if (!id || !pwd || !name) {
+                alert("아이디, 비밀번호, 마스터 이름은 필수 입력 항목입니다!");
+                return;
+            }
+
+            let data = getMastersData();
+            if (data[id]) {
+                alert("이미 존재하는 마스터 아이디입니다. 다른 아이디를 입력해주세요.");
+                return;
+            }
+
+            // 신규 등록
+            data[id] = {
+                name: name,
+                tag: tag || "주특기: 종합 타로 상담",
+                desc: desc || "새롭게 합류한 아르카나 라운지의 마스터입니다.",
+                avatar: avatar || "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80",
+                password: pwd
+            };
+
+            localStorage.setItem('arcana_masters', JSON.stringify(data));
+            closeMasterJoinModal();
+            renderAppMode();
+            alert(`환영합니다! '${name}' 마스터 가입이 완료되었습니다. 로그인 메뉴에서 방금 만든 아이디를 선택해 로그인해보세요.`);
         }
 
         function logoutMaster() {
@@ -627,7 +704,7 @@
             document.getElementById('mainSubtitle').innerText = "운명의 카드가 속삭이는 비밀스러운 공간";
 
             renderAppMode();
-            alert("로그아웃되었습니다. 일반 모드로 전환됩니다.");
+            alert("로그아웃되었습니다.");
         }
 
         function openEditModal(key) {
@@ -655,7 +732,7 @@
             localStorage.setItem('arcana_masters', JSON.stringify(data));
             document.getElementById('editModal').style.display = 'none';
             renderAppMode();
-            alert("프로필 및 사진이 성공적으로 업데이트되었습니다!");
+            alert("프로필이 성공적으로 업데이트되었습니다!");
         }
 
         function submitConsultation(e) {
