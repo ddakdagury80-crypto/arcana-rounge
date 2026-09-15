@@ -203,7 +203,7 @@
             line-height: 1.4;
         }
 
-        /* 홈 화면 중심: 크고 웅장하게 노출되는 마스터 쇼케이스 카드 */
+        /* 마스터 쇼케이스 카드 */
         .showcase-card {
             background: rgba(10, 10, 15, 0.6);
             border: 1px solid var(--border-color);
@@ -385,7 +385,7 @@
         <button class="menu-toggle-btn" onclick="toggleMenu()">☰ 메뉴</button>
     </header>
 
-    <!-- 평소엔 숨겨져 있는 깔끔한 슬라이드 메뉴 -->
+    <!-- 슬라이드 서랍 메뉴 -->
     <div id="sideMenu" class="side-menu">
         <div class="side-menu-header">
             <h3>✦ NAVIGATION</h3>
@@ -394,10 +394,11 @@
         <nav>
             <a href="#intro" onclick="toggleMenu()">🌙 라운지 소개</a>
             <a href="#counselors" onclick="toggleMenu()">🔮 마스터 쇼케이스</a>
-            <a href="#apply" onclick="toggleMenu()">✨ 1:1 비밀 상담 신청</a>
+            <a onclick="toggleMenu(); openApplyModal();" style="color: var(--accent);">✨ 1:1 비밀 상담 신청</a>
             <a href="#reviews" onclick="toggleMenu()">⭐ 타로 후기 게시판</a>
             <a onclick="toggleMenu(); openMasterJoinModal();" style="color: #94a3b8;">📝 신규 마스터 가입</a>
             <a onclick="toggleMenu(); openLoginModal();" style="color: var(--accent); font-weight: bold;" id="loginNavText">🔐 마스터 로그인</a>
+            <a id="masterQueueMenuBtn" onclick="toggleMenu(); openConsultationQueueModal();" style="color: #ffb703; display:none;">📋 접수된 실시간 상담 목록</a>
         </nav>
     </div>
 
@@ -418,7 +419,6 @@
             <p>아르카나 라운지는 오직 진심 어린 통찰과 타로 카드를 통해 당신의 길을 밝혀주는 프라이빗 공간입니다.</p>
         </div>
 
-        <!-- 메인 홈 화면: 큼직한 마스터 일러스트와 소개 중심 쇼케이스 -->
         <div class="card" id="counselors">
             <h3>
                 🔮 마스터 프리미엄 쇼케이스 
@@ -427,17 +427,27 @@
             <p>신비로운 통찰력으로 앞날을 밝혀줄 아르카나의 마스터들을 만나보세요.</p>
             
             <div id="counselorListContainer"></div>
+        </div>
 
-            <!-- 마스터 로그인 시에만 노출되는 상담 타이틀 연동 패널 -->
-            <div id="masterConsultationPanel" style="display:none; margin-top: 20px; border-top: 1px dashed var(--border-color); padding-top: 15px;">
-                <h4 style="color: var(--accent); margin-bottom: 8px; font-size: 0.9em;">📋 접수된 실시간 상담 목록 (클릭하여 타이틀 연동)</h4>
-                <div id="consultationQueueContainer"></div>
+        <div class="card" id="reviews">
+            <h3>⭐ 타로 후기 게시판</h3>
+            <p>카드를 통해 고민을 해결한 내담자들의 솔직한 이야기.</p>
+            <div class="review-box">
+                <p style="margin: 0; font-style: italic; color: var(--text-main);">"제 속마음을 들여다보신 것처럼 방향을 잡아주셔서 큰 위로가 되었습니다."</p>
+                <span style="font-size: 0.75em; color: #94a3b8; display: block; margin-top: 4px;">- 내담자 K님</span>
             </div>
         </div>
 
-        <div class="card" id="apply">
-            <h3>✨ 1:1 비밀 상담 신청</h3>
-            <p>오직 당신만을 위한 프라이빗하고 신비로운 타로 세션.</p>
+    </div>
+
+    <!-- 1:1 비밀 상담 신청 팝업 모달 -->
+    <div id="applyModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeApplyModal()">✕</button>
+            <h3 style="margin-top:0; color:var(--accent); border-bottom:1px solid var(--border-color); padding-bottom:8px; padding-right:25px;">
+                ✨ 1:1 비밀 상담 신청
+            </h3>
+            <p style="font-size: 0.82em; color: #94a3b8; margin-bottom: 12px;">오직 당신만을 위한 프라이빗하고 신비로운 타로 세션.</p>
             
             <form onsubmit="submitConsultation(event)">
                 <div class="form-group">
@@ -460,16 +470,18 @@
                 <button type="submit" class="btn">비밀 상담 요청하기</button>
             </form>
         </div>
+    </div>
 
-        <div class="card" id="reviews">
-            <h3>⭐ 타로 후기 게시판</h3>
-            <p>카드를 통해 고민을 해결한 내담자들의 솔직한 이야기.</p>
-            <div class="review-box">
-                <p style="margin: 0; font-style: italic; color: var(--text-main);">"제 속마음을 들여다보신 것처럼 방향을 잡아주셔서 큰 위로가 되었습니다."</p>
-                <span style="font-size: 0.75em; color: #94a3b8; display: block; margin-top: 4px;">- 내담자 K님</span>
-            </div>
+    <!-- 마스터 전용 실시간 상담 목록 팝업 모달 -->
+    <div id="consultationQueueModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeConsultationQueueModal()">✕</button>
+            <h3 style="margin-top:0; color:var(--accent); border-bottom:1px solid var(--border-color); padding-bottom:8px; padding-right:25px;">
+                📋 실시간 상담 목록 관리
+            </h3>
+            <p style="font-size: 0.82em; color: #94a3b8; margin-bottom: 12px;">항목을 클릭하면 상단 타이틀에 즉시 연동됩니다.</p>
+            <div id="consultationQueueContainer"></div>
         </div>
-
     </div>
 
     <!-- 마스터 로그인 모달 -->
@@ -624,7 +636,7 @@
         function renderAppMode() {
             const bodyEl = document.getElementById('pageBody');
             const loginNavText = document.getElementById('loginNavText');
-            const panel = document.getElementById('masterConsultationPanel');
+            const masterQueueMenuBtn = document.getElementById('masterQueueMenuBtn');
             const data = getMastersData();
             const listContainer = document.getElementById('counselorListContainer');
             const selectContainer = document.getElementById('applyMasterSelect');
@@ -638,7 +650,7 @@
             if (currentLoggedInMaster && data[currentLoggedInMaster]) {
                 bodyEl.classList.add('master-mode');
                 loginNavText.innerHTML = `🔐 관리중 (${data[currentLoggedInMaster].name.split(' ')[1]})`;
-                panel.style.display = 'block';
+                masterQueueMenuBtn.style.display = 'block';
                 
                 const queueEl = document.getElementById('consultationQueueContainer');
                 queueEl.innerHTML = '';
@@ -653,7 +665,7 @@
             } else {
                 bodyEl.classList.remove('master-mode');
                 loginNavText.innerHTML = '🔐 마스터 로그인';
-                panel.style.display = 'none';
+                masterQueueMenuBtn.style.display = 'none';
                 currentLoggedInMaster = null;
                 localStorage.removeItem('arcana_logged_in');
             }
@@ -665,7 +677,6 @@
                     editBtnHtml = `<div style="margin-top: 15px;"><button class="btn-small" onclick="openEditModal('${key}')">내 프로필/일러스트 수정</button></div>`;
                 }
 
-                // 홈 화면에 일러스트와 소개가 큼직하게 노출되는 쇼케이스 카드 구조
                 listContainer.innerHTML += `
                     <div class="showcase-card">
                         <img src="${m.avatar || 'https://via.placeholder.com/300'}" class="showcase-avatar" alt="마스터 일러스트">
@@ -696,7 +707,24 @@
             mainSubtitleEl.innerText = `현재 집중 상담 중인 내담자: [${clientName}]님의 세션 공간입니다.`;
             
             alert(`상단 타이틀에 '${consultTitle}' 세션이 실시간 연동되었습니다!`);
+            closeConsultationQueueModal();
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 비밀 상담 신청 모달 제어
+        function openApplyModal() {
+            document.getElementById('applyModal').style.display = 'flex';
+        }
+        function closeApplyModal() {
+            document.getElementById('applyModal').style.display = 'none';
+        }
+
+        // 마스터 상담 목록 모달 제어
+        function openConsultationQueueModal() {
+            document.getElementById('consultationQueueModal').style.display = 'flex';
+        }
+        function closeConsultationQueueModal() {
+            document.getElementById('consultationQueueModal').style.display = 'none';
         }
 
         function openLoginModal() {
@@ -842,6 +870,7 @@
             
             alert(`[${masterName}] 마스터에게 ${client}님의 비밀 상담 신청이 접수되었습니다.`);
             e.target.reset();
+            closeApplyModal();
         }
 
         window.onload = function() {
