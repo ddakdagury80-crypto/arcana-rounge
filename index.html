@@ -296,6 +296,7 @@
             border: 1px solid rgba(255,255,255,0.05);
         }
 
+        /* 팝업(모달) 및 닫기 버튼 스타일 */
         .modal {
             display: none;
             position: fixed;
@@ -315,9 +316,21 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
             max-height: 90vh;
             overflow-y: auto;
+            position: relative;
         }
         body.master-mode .modal-content {
             background: #1c1512;
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 18px;
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -411,7 +424,8 @@
     <!-- 마스터 로그인 모달 -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; color:var(--accent); border-bottom:1px solid var(--border-color); padding-bottom:8px;">
+            <button class="modal-close-btn" onclick="closeLoginModal()">✕</button>
+            <h3 style="margin-top:0; color:var(--accent); border-bottom:1px solid var(--border-color); padding-bottom:8px; padding-right:25px;">
                 🔐 마스터 인증 로그인
             </h3>
             <p style="font-size: 0.85em; color: #94a3b8;">등록된 마스터 계정을 선택하고 비밀번호를 입력하세요.</p>
@@ -433,7 +447,8 @@
     <!-- 신규 마스터 가입 신청 모달 -->
     <div id="masterJoinModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; color:var(--accent); border-bottom:1px solid var(--border-color); padding-bottom:8px;">
+            <button class="modal-close-btn" onclick="closeMasterJoinModal()">✕</button>
+            <h3 style="margin-top:0; color:var(--accent); border-bottom:1px solid var(--border-color); padding-bottom:8px; padding-right:25px;">
                 📝 신규 마스터 가입 신청
             </h3>
             <p style="font-size: 0.85em; color: #94a3b8;">디바이스(PC/폰)에서 직접 이미지 파일을 선택해 등록할 수 있습니다.</p>
@@ -471,7 +486,8 @@
     <!-- 프로필 및 사진 수정 모달 -->
     <div id="editModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0; color:var(--accent); border-bottom:1px solid var(--border-color); padding-bottom:8px;">
+            <button class="modal-close-btn" onclick="document.getElementById('editModal').style.display='none'">✕</button>
+            <h3 style="margin-top:0; color:var(--accent); border-bottom:1px solid var(--border-color); padding-bottom:8px; padding-right:25px;">
                 ✍️ 프로필 및 사진 파일 수정
             </h3>
             <input type="hidden" id="editMasterKey">
@@ -775,4 +791,3 @@
     </script>
 </body>
 </html>
-
